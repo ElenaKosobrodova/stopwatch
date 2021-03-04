@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 
 const formattedSeconds = (sec: number) =>
   Math.floor(sec / 60) + ":" + ("0" + (sec % 60)).slice(-2);
@@ -14,12 +14,12 @@ const StopwatchHooks: React.FunctionComponent<StopwatchProps> = props => {
   const [laps, setLaps] = useState<any[]>([]);
   const [incrementer, setIncrementer] = useState<any>();
 
-
   function handleStartClick() {
-
-    setIncrementer ( setInterval(() => {
-      setSecondsElapsed(secondsElapsed=>secondsElapsed+1);
-    }, 1000));
+    setIncrementer(
+      setInterval(() => {
+        setSecondsElapsed(secondsElapsed => secondsElapsed + 1);
+      }, 1000)
+    );
   }
 
   function handleStopClick() {

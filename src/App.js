@@ -1,11 +1,11 @@
 import "./App.css";
-import StopwatchHooks from './StopwatchHooks';
+import Stopwatch from './Stopwatch';
 
 
 function App() {
   return (
     <div className="App" id="root">
-     <StopwatchHooks initialSeconds={0}/>
+
     </div>
   );
 }
