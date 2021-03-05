@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const formattedSeconds = (sec: number) =>
   Math.floor(sec / 60) + ":" + ("0" + (sec % 60)).slice(-2);
@@ -10,7 +10,7 @@ interface StopwatchProps {
 const StopwatchHooks: React.FunctionComponent<StopwatchProps> = props => {
   let initial = props.initialSeconds;
   const [secondsElapsed, setSecondsElapsed] = useState(initial);
-  const [lastClearedIncrementer, setLastClearedIncrementer] = useState();
+  const [lastClearedIncrementer, setLastClearedIncrementer] = useState<any>();
   const [laps, setLaps] = useState<any[]>([]);
   const [incrementer, setIncrementer] = useState<any>();
 
@@ -49,6 +49,14 @@ const StopwatchHooks: React.FunctionComponent<StopwatchProps> = props => {
       </div>
     );
   }
+
+    useEffect(() => {
+      let incr = setInterval(() => {
+        setIncrementer(incrementer + 1);
+      }, 1000);
+      return () => clearInterval(incr);
+    }, []);
+
 
   return (
     <div className="stopwatch">

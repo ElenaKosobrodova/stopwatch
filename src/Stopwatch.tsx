@@ -38,6 +38,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
     this.setState({
       lastClearedIncrementer: this.incrementer
     });
+ 
   };
   handleResetClick(){
     clearInterval(this.incrementer);
@@ -89,7 +90,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
           {this.state.laps &&
             this.state.laps.map((lap:number, i:number) => (
               <Lap
-                key={i}
+              
                 index={i + 1}
                 lap={lap}
                 onDelete={this.handleDeleteClick(i)}
