@@ -14,17 +14,18 @@ interface StopwatchProps extends ClassAttributes<Stopwatch> {
   initialSeconds: number;
 }
 class Stopwatch extends Component<StopwatchProps, any> {
-  //class variables
   incrementer: any;
+  //laps has to be moved to this.state
   laps: any[];
-  // constructor uses props: StopwatchProps to be more specific
   constructor(props: StopwatchProps) {
     super(props);
     //initial state
     this.state = {
       secondsElapsed: props.initialSeconds,
-      lastClearedIncrementer: null
+      lastClearedIncrementer: null //,
+      //laps: []
     };
+
     /*this binding is missing for handleStartClick, handleStopClick, etc. 
     "this" in onClick={this.handle...Click} will be undefined. We have to add:
        this.handleStartClick = this.handleStartClick.bind(this);
@@ -33,7 +34,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
        this.handleLabClick = this.handleLabClick.bind(this);
        this.handleDeleteClick = this.handleDeleteClick.bind(this);
     */
-    this.laps = [];
+    this.laps = []; //this line has to be deleted, because laps was moved to this.state
   }
 
   handleStartClick() {
@@ -53,7 +54,10 @@ class Stopwatch extends Component<StopwatchProps, any> {
     });
   }
 
-  //syntax error. (this.laps = []), should be replaced by this.laps=[];
+  /*syntax error. (this.laps = []), should be this.laps=[]; 
+  Anyway, this.laps=[]; and this.setState({secondsElapsed:0}) should be replaced by
+   this.setState({ laps: [], secondsElapsed: 0 });
+  */
   handleResetClick() {
     clearInterval(this.incrementer);
     (this.laps = []),
@@ -62,10 +66,17 @@ class Stopwatch extends Component<StopwatchProps, any> {
       });
   }
   handleLabClick() {
+    //replace the next line by this.setState({laps: this.state.laps.concat([this.state.secondsElapsed])});
     this.laps = this.laps.concat([this.state.secondsElapsed]);
     this.forceUpdate();
   }
   handleDeleteClick(index: number) {
+    /*replace the next line by
+   const laps = [...this.state.laps];
+    laps.splice(index, 1);
+    return () => this.setState({ laps });
+    In the other case, all laps except for the last one will be deleted when X is pressed
+  */
     return () => this.laps.splice(index, 1);
   }
   render() {
@@ -104,7 +115,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
           {this.laps &&
             this.laps.map((lap, i) => (
               <Lap
-              //unique key is missing. I added key={i}
+                //unique key is missing. I added key={i}
                 index={i + 1}
                 lap={lap}
                 onDelete={this.handleDeleteClick(i)}
@@ -115,6 +126,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
     );
   }
 }
+// onDelete in the next line has to have type any. Replace ()=>{} by any
 const Lap = (props: { index: number; lap: number; onDelete: () => {} }) => (
   <div key={props.index} className="stopwatch-lap">
     {" "}

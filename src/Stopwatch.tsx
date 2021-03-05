@@ -1,5 +1,5 @@
 import * as ReactDOM from "react-dom";
-import { Component} from "react";
+import { Component } from "react";
 
 const formattedSeconds = (sec: number) =>
   Math.floor(sec / 60) + ":" + ("0" + (sec % 60)).slice(-2);
@@ -18,11 +18,11 @@ class Stopwatch extends Component<StopwatchProps, any> {
       lastClearedIncrementer: null,
       laps: []
     };
-       this.handleStartClick = this.handleStartClick.bind(this);
-       this.handleStopClick = this.handleStopClick.bind(this);
-       this.handleResetClick = this.handleResetClick.bind(this);
-       this.handleLabClick = this.handleLabClick.bind(this);
-       this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.handleStartClick = this.handleStartClick.bind(this);
+    this.handleStopClick = this.handleStopClick.bind(this);
+    this.handleResetClick = this.handleResetClick.bind(this);
+    this.handleLabClick = this.handleLabClick.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
   handleStartClick() {
@@ -31,29 +31,30 @@ class Stopwatch extends Component<StopwatchProps, any> {
         secondsElapsed: this.state.secondsElapsed + 1
       });
     }, 1000);
-  };
+  }
 
-  handleStopClick (){
+  handleStopClick() {
     clearInterval(this.incrementer);
     this.setState({
       lastClearedIncrementer: this.incrementer
     });
- 
-  };
-  handleResetClick(){
+  }
+  handleResetClick() {
     clearInterval(this.incrementer);
-    this.setState({laps:[]});
-    this.setState({
-      secondsElapsed: 0
-    });
-  };
+    this.setState({ laps: [], secondsElapsed: 0 });
+  }
   handleLabClick() {
-    this.setState({laps: this.state.laps.concat([this.state.secondsElapsed])});
+    this.setState({
+      laps: this.state.laps.concat([this.state.secondsElapsed])
+    });
     this.forceUpdate();
-  };
-  handleDeleteClick (index: number) {
-    return () => this.setState({laps: this.state.laps.splice(index, 1)});
-  };
+  }
+  handleDeleteClick(index: number) {
+    const laps = [...this.state.laps];
+    laps.splice(index, 1);
+    return () => this.setState({ laps });
+  }
+
   render() {
     const { secondsElapsed, lastClearedIncrementer } = this.state;
     return (
@@ -88,9 +89,9 @@ class Stopwatch extends Component<StopwatchProps, any> {
         ) : null}
         <div className="stopwatch-laps">
           {this.state.laps &&
-            this.state.laps.map((lap:number, i:number) => (
+            this.state.laps.map((lap: number, i: number) => (
               <Lap
-              
+                key={i}
                 index={i + 1}
                 lap={lap}
                 onDelete={this.handleDeleteClick(i)}
@@ -101,7 +102,7 @@ class Stopwatch extends Component<StopwatchProps, any> {
     );
   }
 }
-const Lap = (props: { index: number; lap: number; onDelete:any }) => (
+const Lap = (props: { index: number; lap: number; onDelete: any }) => (
   <div key={props.index} className="stopwatch-lap">
     {" "}
     <strong>{props.index}</strong>/ {formattedSeconds(props.lap)}{" "}
